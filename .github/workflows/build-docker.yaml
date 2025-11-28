@@ -22,3 +22,4 @@ jobs:
           docker login -u 1213117686 -p ${{ secrets.DOCKER_HUB_TOKEN }}
           docker push 1213117686/devops-qr-code-backend:latest
           docker push 1213117686/devops-qr-code-frontend:latest
+          
