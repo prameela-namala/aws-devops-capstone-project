@@ -1,4 +1,5 @@
 name: Build and Publish image to Docker Hub
+
 on:
   push:
     branches:
@@ -10,20 +11,35 @@ on:
 jobs:
   publish_images:
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: build image
+      - name: Build Backend Image
         run: |
-          docker build ./api/ -t 1213117686/devops-qr-code-backend:latest
-          docker build ./front-end-nextjs/ -t 1213117686/devops-qr-code-frontend:latest
+          docker build ./api/ \
+            -t 1213117686/devops-qr-code-backend:latest
 
-      - name: login to docker hub
+      - name: Build Frontend Image
+        run: |
+          docker build ./front-end-nextjs/ \
+            -t 1213117686/devops-qr-code-frontend:latest
+
+      - name: Verify Secret (Debug)
+        run: |
+          if [ -z "${{ secrets.DOCKER_HUB_TOKEN }}" ]; then
+            echo "❌ Secret DOCKER_HUB_TOKEN is EMPTY!"
+            exit 1
+          else
+            echo "✅ Secret exists. Proceeding..."
+          fi
+
+      - name: Login to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u 1213117686 --password-stdin
 
-      - name: push images
+      - name: Push Images to Docker Hub
         run: |
           docker push 1213117686/devops-qr-code-backend:latest
           docker push 1213117686/devops-qr-code-frontend:latest
