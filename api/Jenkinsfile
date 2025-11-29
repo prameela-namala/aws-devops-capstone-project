@@ -17,13 +17,13 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
-                sh """
-                    echo "Building backend Docker image..."
-                    docker build -t ${DOCKER_REPO}:${IMAGE_TAG} -f Dockerfile.backend .
-                """
-            }
-        }
+    steps {
+        sh """
+            echo "Building backend Docker image..."
+            docker build -t ${DOCKER_REPO}:${IMAGE_TAG} api/
+        """
+    }
+}
 
         stage('Docker Hub Login') {
             steps {
